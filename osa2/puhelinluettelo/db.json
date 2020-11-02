@@ -1,0 +1,44 @@
+{
+  "persons": [
+    {
+      "name": "Arto Hoplas",
+      "number": "040-5323523",
+      "id": 1
+    },
+    {
+      "name": "Ada Lovelace",
+      "number": "39-44-5323523",
+      "id": 2
+    },
+    {
+      "name": "Dan Abramov",
+      "number": "12-43-234345",
+      "id": 3
+    },
+    {
+      "name": "Mary Poppendieck",
+      "number": "39-23-6423122",
+      "id": 4
+    },
+    {
+      "id": 5,
+      "name": "Hassu Hopo",
+      "number": "050 050 0505"
+    },
+    {
+      "id": 6,
+      "name": "Miki Hiri",
+      "number": "111 111 2221"
+    },
+    {
+      "id": 7,
+      "name": "Aku Anka",
+      "number": "030 303 3030"
+    },
+    {
+      "id": 8,
+      "name": "Harmaa Pekka",
+      "number": "069 666 1234"
+    }
+  ]
+}
