@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/persons'
+const baseUrl = '/api/persons'
 
 //Moduuli palauttaa olion, jonka kenttinä (getAll, create, update ja deletePerson) 
 //on tiedon lisäämistä, päivittämista ja poistamista käsittelyä hoitava funktio. 
