@@ -40,6 +40,7 @@ const App = () => {
     setFilter(event.target.value)
   }
 
+  /* EI HUOLEHDITA TÄSTÄ ATM
   //Lisätään uusi ihminen tietoineen
   const addPerson = (event) => {    
     event.preventDefault()    
@@ -47,7 +48,8 @@ const App = () => {
     const personObject = {
       //id: persons.length + 1, //TÄMÄ PITÄÄ MUUTTAA JOKSIKIN MUUKSI KOSKA JOS VÄLISTÄ POISTAA TULEE VIRHE
       name: newName,
-      number: newNumber
+      number: newNumber,
+      id: persons.length + 1
     }
 
     //Tarkastetaan että nimi ei ole tyhjä
@@ -122,6 +124,28 @@ const App = () => {
       setNotificationType('error')
     }, 5000)
   }
+*/
+
+
+//Uudelleen tehty pieni versio note esimerkin mukaisesti. Pitääkö muokata????????????????????
+const addPerson = (event) => {
+  event.preventDefault()
+  const personObject = {
+    name: newName,
+    number: newNumber,
+    id: persons.length + 1
+  }
+
+  personService
+    .create(personObject)
+    .then(returnedPerson => {
+      setPersons(persons.concat(returnedPerson))
+      setNewName('')
+      setNewNumber('')
+    })
+}
+
+
 
   //Poistetaan haluttu yhteystieto puhelinluettelosta toimii eventillä mutta ei id:llä jostain syystä
   const deletePerson = (id, name) => {
