@@ -40,7 +40,7 @@ const App = () => {
     setFilter(event.target.value)
   }
 
-  /* EI HUOLEHDITA TÄSTÄ ATM
+  /*
   //Lisätään uusi ihminen tietoineen
   const addPerson = (event) => {    
     event.preventDefault()    
@@ -55,7 +55,7 @@ const App = () => {
     //Tarkastetaan että nimi ei ole tyhjä
     if (newName !== '' && newNumber !== '') {       
       //Tarkastetaan onko nimi jo puhelinluettelossa, tarkastetaan pienillä kirjaimilla joten fontilla ei väliä
-      if (persons.find(person => person.name.toLowerCase() === newName.toLowerCase())){
+      if (persons.find(person => person.name === newName.toLowerCase())){
         //console.log("Tää nimihän löyty")
         //window.alert(newName, " is already added to phonebook, pleace change the name")
         setNotificationType('error')
@@ -124,10 +124,10 @@ const App = () => {
       setNotificationType('error')
     }, 5000)
   }
+
 */
 
-
-//Uudelleen tehty pieni versio note esimerkin mukaisesti. Pitääkö muokata????????????????????
+//Uudelleen tehty pieni versio note esimerkin mukaisesti.
 const addPerson = (event) => {
   event.preventDefault()
   const personObject = {

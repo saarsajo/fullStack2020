@@ -8,7 +8,7 @@ const Persons = ({ filter, persons, deletePerson }) => {
         //Vertaa käyttäjän syöttämää filtteriä olemassa oleviin nimiin, huomioimatta isoja ja pieniä kirjaimia
         //Antaa eteenpäin näytettävät nimet filtteröitynä
         persons.filter(person =>
-            person.name.toLowerCase().includes(filter.toLowerCase())).map(person =>
+            person.name.includes(filter.toLowerCase())).map(person =>
         <span key={person.id}>
             <Person 
                 name={person.name} 

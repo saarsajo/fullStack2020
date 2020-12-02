@@ -1,159 +1,158 @@
-require('dotenv').config()
 //Node.js versio puhelinluettelosta
 //expressiä kutsumalla luodaan muuttujaan app sijoitettava express-sovellusta vastaava olio
 const express = require('express')
-const app = express()
 const morgan = require('morgan')
+const app = express()
+require('dotenv').config()
+const bodyParser = require('body-parser')
 //Sallitaan muista origineista tulevat pyynnöt käyttämällä Noden cors-middlewarea.
 //Eli voidaan esim siirtää dataa portin 3000 ja 3001 välillä
 const cors = require('cors')
 const Person = require('./models/person')
 
-app.use(express.json()) 
-app.use(cors())
 
+app.use(bodyParser.json())
+app.use(cors())
+app.use(express.json()) 
 //Tarkastaa Express GET-tyyppisten HTTP-pyyntöjen yhteydessä ensin löytyykö pyynnön polkua 
 //vastaavan nimistä tiedostoa hakemistosta build. Jos löytyy, palauttaa express tiedoston.
 app.use(express.static('build'))
-
 app.use(morgan('tiny'))
-
-
-let persons = [
-    {
-        id : 1,
-        name: "Arto Hellas",
-        number: "040-123456"
-    },
-    {
-        id : 2,
-        name: "Ada",
-        number: "040-987654"
-    },
-    {
-        id : 3,
-        name: "Dan",
-        number: "040-456123"
-    },
-    {
-        id : 4,
-        name: "Mary",
-        number: "040-654328"
-    },
-    {
-      id : 5,
-      name: "Josh",
-      number: "040-654211"
-  }
-]
-
-//Info sivun aikaan liittyvät määrrittelyt
-let dateObject = new Date();
-// Tämän hetkisen ajan määrittäminen ja esitetään yksi numeroiset ajan määreet muodossa "0 + numero"
-let day = ("0" + dateObject.getDate()).slice(-2);
-// Kuukausien määrittäminen
-let month = ("0" + (dateObject.getMonth())).slice(-2);
-// Vuosien
-let year = dateObject.getFullYear();
-// Tuntien
-let hours = dateObject.getHours();
-// Minuuttien
-let minutes = dateObject.getMinutes();
-// Sekunttien
-let seconds = dateObject.getSeconds();
-//Yhdistetään kaikki aikatiedot
-const timeAndDate = new Date(Date.UTC(year, month, day, hours, minutes, seconds));
-let info = `Phonebook has info for ${persons.length} people. ${timeAndDate.toUTCString()}`;
-
-
-//Määritellään sovellukselle kaksi routea. 
-//Ensimmäinen määrittelee tapahtumankäsittelijän, joka hoitaa sovelluksen juureen 
-//eli polkuun / tulevia HTTP GET -pyyntöjä:
-
-    /*
-  //Haetaan puhelinluettelon tiedot ja tulostetaan /persons sivulle
-  app.get('/api/persons', (request, response) => {
-    response.json(persons)
-  })
-
-*/
-
 
 //Haetaan puhelinluettelon tiedot ja tulostetaan /persons sivulle
 //Tämän laittamisen jälkeen jotain ongelmia!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  app.get('/api/persons', (request, response) => {
-    Person.find({}).then(people => {
-      response.json(people.map(person => person.toJSON()))
+app.get('/api/persons', (request, response) => {
+  Person.find({}).then(people => {
+    response.json(people.map(person => person.toJSON()))
+  })
+})
+
+//Täällä haetaan aikatiedot ja tulostetaan /info sivulle
+app.get('/info', (req, res) => {
+  Person.find({})
+    .then(persons => {
+      res.send(`<p>The phonebook has info for ${persons.length} people</p><p>${new Date()}</p>`)
     })
-  })
-
-  //Täällä haetaan aikatiedot ja tulostetaan /info sivulle
-  app.get('/info', (request, response) => {
-    response.json(info)
-  })
-
-//Luodaan personille randomi id
-const generateId = () => {
-  return Math.floor(Math.random() * Math.floor(99999999999));
-}
+})
 
 //Lisätään uusi henkilö tietokantaan
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
+  //console.log("Bodyn sisältö on ", body)
+  //console.log("Bodyn nimi on ", body.name)
+  //console.log("Body length is ", body.name.length)
 
-//Ei ressata tästä nyt
-  /*
-  //Jos vastaanotetulta datalta puuttuu sisältö kentästä name, vastataan statuskoodilla 400 bad request:
-  if (body.content === undefined) {
-      //Tulostetaan virheilmoitus
-      return response.status(400).json({ 
-        error: 'Name or number missing' 
-      })
+  //Luodaan uusi henkilö puhelinnumeroineen
+  const person = new Person({
+    name: body.name,
+    number: body.number
+  })
+
+  //Tallennetaan nimi tietokantaan
+  person
+    .save()
+    .then(savedPerson => {      
+      return savedPerson.toJSON()    
+    })    
+    .then(savedAndFormattedPerson => {      
+      response.json(savedAndFormattedPerson)    
+    }) 
+    .catch(error => next(error))    
+  
+/*
+    //Jos lisättävä on tyhjä tulostetaan virhe
+    if (body.name === undefined || body.number === undefined) {
+      return response.status(400).json({ error: 'content missing' })
+    }
+  
+    if (body.name.length < 3 || body.number.length < 8){
+      return response.status(400).json({ error: 'Too short name or number. Name must be at least 3 characters and the number must be 8.' })
+    }
+      else {
+        //Luodaan uusi henkilö puhelinnumeroineen
+        const person = new Person({
+          name: body.name,
+          number: body.number
+        })
+
+        //Tallennetaan nimi tietokantaan
+        person
+          .save()
+          .then(savedPerson => {      
+            return savedPerson.toJSON()    
+          })    
+          .then(savedAndFormattedPerson => {      
+            response.json(savedAndFormattedPerson)    
+          }) 
+          .catch(error => next(error))    
     }
 */
-    //Luodaan uusi person
-    const person = new Person({
-      name: body.name,
-      number: body.number
-    })
-
-    //Tallennetaan nimi tietokantaan
-    person.save().then(savedPerson => {
-      response.json(savedPerson.toJSON())
-    })
-
-    /* EI VÄLITETÄ TÄSTÄ ATM
-    //system.log("Ensin ", persons, " Sitten ", person, " person.name on ", person.name )
-    //Tarkastetaan että nimi ei ole vielä listalla
-    if (persons.find(person => person.name.toLowerCase() === body.name.toLowerCase())){
-      return response.status(400).json({ 
-        error: 'name must be unique' 
-      }) 
-    }
-    else{
-      //Lisätään uusi nimi kantaan
-      persons = persons.concat(person)
-      response.json(person)
-    }
-  */
 })
 
 //käsittelee kaikki HTTP GET -pyynnöt, jotka ovat muotoa /api/persons/JOTAIN, 
 //missä JOTAIN on mielivaltainen merkkijono, joka kuvastaa id:tä
-app.get('/api/persons/:id', (request, response) => {
-  Person.findById(request.params.id).then(person => {
-    response.json(person.toJSON())
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+  .then(person => {
+    if (person) {        
+      response.json(person.toJSON())
+    } else {        
+      response.status(404).end()      
+    }    
   })
+  .catch(error => next(error))  
 })
 
-
-// Poisto tapahtuu tekemällä HTTP DELETE -pyyntö resurssin urliin:
-app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter(person => person.id !== id)
-
-  response.status(204).end()
+// Poistetaan id:n mukaan haluttu henkilö numeroineen:
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
+
+//Muistiinpanon tärkeyden muuttamisen mahdollistava olemassaolevan muistiinpanon päivitys 
+//onnistuu helposti metodilla findByIdAndUpdate.
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  const person = {
+    name: body.name,
+    number: body.number
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updatedPerson => {
+      response.json(updatedPerson.toJSON)
+    })
+    .catch(error => next(error))
+})
+
+//Virheenkäsittelijä tilanteessa, jossa endpointiin ei saada yhteyttä
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+// olemattomien osoitteiden käsittely
+app.use(unknownEndpoint)
+
+
+//Virheiden käsittelijä handleri
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError' && error.kind == 'ObjectId') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+  else if (error.name === 'ValidationError') {    
+    return response.status(400).json({ error: error.message })  }
+  next(error)
+}
+
+// virheellisten pyyntöjen käsittely
+app.use(errorHandler)
+
 
 //Haetaan envistä käytettävä portti
 const PORT = process.env.PORT
