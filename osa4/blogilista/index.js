@@ -1,5 +1,5 @@
 //index.js ainoastaan importaa tiedostossa app.js olevan varsinaisen sovelluksen ja käynnistää sen. 
-const app = require('./app') // the actual Express app
+const app = require('./app') // varsinainen Express-sovellus
 const http = require('http')
 const config = require('./utils/config')
 const logger = require('./utils/logger')
