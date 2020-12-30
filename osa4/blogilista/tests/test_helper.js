@@ -1,6 +1,7 @@
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
-//
+//Testien käyttämä lista blogeja
 const initialBlogs = [  
     { 
         _id: "5a422a851b54a676234d17f7", 
@@ -52,26 +53,27 @@ const initialBlogs = [
     }
 ]
 
-//Mahdollista luoda tietokanta-id, joka ei kuulu millekään kannassa olevalle oliolle.
+//Mahdollista luoda tietokanta-id, joka ei kuulu millekään kannassa olevalle oliolle
 const nonExistingId = async () => {
-    const blog = new Blog({ 
-        title: "willremovethissoon", 
-        author: "willremovethissoon", 
-        url: "www.willremovethissoon.com", 
-        likes: 2, 
-    })
-  await blog.save()
-  await blog.remove()
+    const blog = new Blog({ title: 'willremovethissoon' })
+    await blog.save()
+    await blog.remove()
+  
+    return blog._id.toString()
+  }
 
-  return blog._id.toString()
-}
-
-//blogsInDb avulla voidaan tarkastaa sovelluksen tietokannassa olevat muistiinpanot. 
+//blogsInDb avulla voidaan tarkastaa sovelluksen tietokannassa olevat muistiinpanot
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
   return blogs.map(blog => blog.toJSON())
 }
 
+//Tarkastetaan lisäysoperaation jälkeisen tietokannan tila
+const usersInDb = async () => {
+    const users = await User.find({})
+    return users.map(u => u.toJSON())
+}
+
 module.exports = {
-  initialBlogs, nonExistingId, blogsInDb
+  initialBlogs, nonExistingId, blogsInDb, usersInDb
 }
