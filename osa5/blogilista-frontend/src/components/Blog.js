@@ -1,9 +1,12 @@
 import React from 'react'
 
-const Blog = ({ blog }) => (
-  <div>
-    {blog.title} {blog.author} 
-  </div>
-)
+//Määritellään mitä Blogi
+const Blog = ({ blog, user }) => {
+  return (
+    <li className='blog'>
+      {blog.title} : {blog.author}
+    </li>
+  )
+}
 
 export default Blog

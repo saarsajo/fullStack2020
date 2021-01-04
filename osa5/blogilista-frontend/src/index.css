@@ -1,0 +1,43 @@
+
+h1 {
+    font-size: 26px;
+    color: rgb(22, 63, 139);
+    font-style: italic;
+  }
+
+
+
+h2 {
+    font-size: 18px;
+    color: rgb(22, 63, 139);
+    font-style: italic;
+  }
+
+
+.error {
+    font-size: 16px;
+    border-style: solid;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    color: rgb(128, 0, 0);
+    background: rgb(255, 197, 197);
+}
+
+.confirmation {
+    font-size: 16px;
+    border-style: solid;
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    color: rgb(0, 66, 0);
+    background: rgb(193, 255, 193);
+}
+
+.footer {
+    font-size: 18px;
+    color: rgb(22, 63, 139);
+    font-style: italic;
+}

@@ -14,17 +14,25 @@ const getAll = () => {
 }
 
 //asettaa moduulin tallessa pitämän tokenin Authorization-headeriin
-const create = async newObject => {
-  const config = {    
-    headers: { Authorization: token }  
+const create = newObject => {
+  const config = {
+    headers: { Authorization: token },
   }
-  const response = await axios.post(baseUrl, newObject, config)  
-  return response.then(response => response.data)
-}
-
-const update = (id, newObject) => {
-  const request = axios.put(`${ baseUrl } /${id}`, newObject)
+  
+  const request = axios.post(baseUrl, newObject, config)
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update, setToken }
+//Päivitetään blogi
+const update = (id, newObject) => {
+  const request = axios.put(`${ baseUrl }/${id}`, newObject)
+  return request.then(response => response.data)
+}
+
+
+const getAllUsers = () => {
+  const request = axios.get('/api/users')
+  return request.then(response => response.data)
+}
+
+export default { getAll, create, setToken, update, getAllUsers }
