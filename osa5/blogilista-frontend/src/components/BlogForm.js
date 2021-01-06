@@ -1,44 +1,79 @@
-import React from 'react'
+import React, {useState} from 'react'
 
-//
-const BlogForm = ({
-  addBlog,
-  title,
-  author,
-  url,
-}) => {
+//Uuden blogin lisäämislomake
+const BlogForm = ({createBlog}) => {
 
+
+  //Pitääkö muokata???
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  //asetetaan blogin title
+  const handleTitleChange = ({ target }) => {
+    setTitle(target.value)
+  }  
+
+  //asetetaan blogin author
+  const handleAuthorChange = ({ target }) => {
+    setAuthor(target.value)
+  }
+
+  //asetetaan blogin url
+  const handleUrlChange = ({ target }) => {
+    setUrl(target.value)
+  } 
+
+  //Lisätään uusi blogi 
+  const addBlog = (event) => {
+    event.preventDefault()
+    createBlog({
+      title: title,
+      author: author,
+      url: url,
+    })
+
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
+
+  //Määritellään mitä piirretään näytölle
   return (
-    <form onSubmit={addBlog}>        
+    <div>
+      <h2>Create a new blog</h2>
+
+      <form onSubmit={addBlog}>        
       <div>          
         title            
         <input            
-          type="text"            
-          value={title}            
-          name="title"            
-          onChange={({ target }) => setTitle(target.value)}          
+          type="text"             
+          name="title"      
+          value={title}     
+          onChange={handleTitleChange}          
         />        
       </div>        
       <div>          
         author            
         <input            
-          type="text"            
-          value={author}            
-          name="author"            
-          onChange={({ target }) => setAuthor(target.value)}          
+          type="text"                    
+          name="author"     
+          value={author}       
+          onChange={handleAuthorChange}          
         />        
       </div>
       <div>          
         url            
         <input            
           type="text"            
-          value={url}            
-          name="url"            
-          onChange={({ target }) => setUrl(target.value)}          
+          name="url"   
+          value={url}         
+          onChange={handleUrlChange}          
         />        
       </div>              
       <button type="submit">Create</button>      
     </form>
+    </div>
   )
 }
 
