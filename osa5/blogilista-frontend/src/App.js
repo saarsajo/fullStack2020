@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
-//import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
 import blogService from './services/blogs'
@@ -13,16 +12,19 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [notification, setNotification ] = useState(null)
   const [notificationType, setNotificationType ] = useState(null)
-
+  const [users, setUsers] = useState([])
   const [username, setUsername] = useState('')   
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
 
-
-
   const blogFormRef = React.createRef()
 
   useEffect(() => {
+    blogService.
+      getAllUsers()
+      .then(users => 
+      setUsers(users)
+    )
     blogService
       .getAll()
       .then(initialBlogs  =>
@@ -39,7 +41,6 @@ const App = () => {
       //console.log("Jumatsuika mikä username: ", user.username)
       //console.log("Jumatsuika mikä user ", user)
       //console.log("Jumatsuika mikä user.id ", user.id)
-
       blogService.setToken(user.token)
     }
   }, [])
@@ -104,6 +105,7 @@ const App = () => {
   //Määritetään sivulle kirjoitettavat uloskirjautumispalkit
   const logoutForm = () => (
     <form onSubmit={handleLogOut}>        
+    {user.name} logged in with a username: {user.username}
     <button type="submit">Logout</button>      
   </form>
   )
@@ -126,7 +128,7 @@ const App = () => {
 
 
   //Näytetään blogit TÄÄLLÄ FILTTERÖINTI PITÄISI SAADA KUNTOON TÄLLÄ HETKELLÄ DIIPADAAPAA
-  const showBlogs = () => blogs.filter(user => username === username).map(filteredBlog =>
+  const showBlogs = () => blogs.map(filteredBlog =>
     <Blog
       key={filteredBlog.id}
       blog={filteredBlog}
@@ -153,12 +155,10 @@ const App = () => {
     return (
       <div>
         <h1>Blogs</h1>         
-          <p>{user.name} logged in with a username: {user.username}</p>
-          {logoutForm()}
-
-          <Notification notification={notification} notificationType={notificationType} /> 
-          {blogForm()}
-          {showBlogs()}
+        {logoutForm()}
+        <Notification notification={notification} notificationType={notificationType} /> 
+        {blogForm()}
+        {showBlogs()}
         <Footer />
       </div>
     )

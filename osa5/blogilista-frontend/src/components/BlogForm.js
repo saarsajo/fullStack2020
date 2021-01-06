@@ -38,41 +38,40 @@ const BlogForm = ({createBlog}) => {
     setUrl('')
   }
 
-  //Määritellään mitä piirretään näytölle
+  //Määritellään mitä piirretään uuden blogin lisääjään
   return (
     <div>
       <h2>Create a new blog</h2>
-
       <form onSubmit={addBlog}>        
-      <div>          
-        title            
-        <input            
-          type="text"             
-          name="title"      
-          value={title}     
-          onChange={handleTitleChange}          
-        />        
-      </div>        
-      <div>          
-        author            
-        <input            
+        <div>          
+          title            
+          <input            
+            type="text"             
+            name="title"      
+            value={title}     
+            onChange={handleTitleChange}          
+          />        
+        </div>        
+        <div>          
+          author            
+          <input            
           type="text"                    
           name="author"     
           value={author}       
           onChange={handleAuthorChange}          
-        />        
-      </div>
-      <div>          
-        url            
-        <input            
-          type="text"            
-          name="url"   
-          value={url}         
-          onChange={handleUrlChange}          
-        />        
-      </div>              
-      <button type="submit">Create</button>      
-    </form>
+          />   
+        </div>
+        <div>          
+          url            
+          <input            
+            type="text"            
+            name="url"   
+            value={url}         
+            onChange={handleUrlChange}          
+          />        
+        </div>      
+        <button type="submit">Create</button>      
+      </form>
     </div>
   )
 }

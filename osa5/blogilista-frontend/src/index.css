@@ -1,21 +1,23 @@
 
 h1 {
-    font-size: 26px;
+    font-size: 30px;
     color: rgb(22, 63, 139);
     font-style: italic;
   }
 
-
+  li { 
+    list-style: none; 
+  }
 
 h2 {
-    font-size: 18px;
+    font-size: 20px;
     color: rgb(22, 63, 139);
     font-style: italic;
   }
 
 
 .error {
-    font-size: 16px;
+    font-size: 20px;
     border-style: solid;
     border-radius: 6px;
     padding: 12px;
@@ -40,4 +42,16 @@ h2 {
     font-size: 18px;
     color: rgb(22, 63, 139);
     font-style: italic;
+}
+
+.blog {
+  border-style: solid;
+  border-width: 2px;
+  margin-bottom: 5px;
+  border-color:  rgb(22, 63, 139);
+}
+
+div {
+  padding-bottom: 2px;
+  padding-top: 2px;
 }
