@@ -12,19 +12,12 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [notification, setNotification ] = useState(null)
   const [notificationType, setNotificationType ] = useState(null)
-  const [users, setUsers] = useState([])
   const [username, setUsername] = useState('')   
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
-
   const blogFormRef = React.createRef()
 
   useEffect(() => {
-    blogService.
-      getAllUsers()
-      .then(users => 
-      setUsers(users)
-    )
     blogService
       .getAll()
       .then(initialBlogs  =>
@@ -47,12 +40,21 @@ const App = () => {
 
   //Lisätään uusi blogi
  const addBlog = (blogObject) => {
-  blogFormRef.current.toggleVisibility()
-  blogService
-    .create(blogObject)
-    .then(returnedBlog => {     
-      setBlogs(blogs.concat(returnedBlog))
-    })
+    //console.log("Uutta blogia lisätessä uuden blogin sisältö on: ",blogObject)
+    //Uudella blogilla tulee olla title, author ja url
+    if (blogObject.title && blogObject.author && blogObject.url){
+      blogFormRef.current.toggleVisibility()
+      blogService
+        .create(blogObject)
+        .then(returnedBlog => {     
+          setBlogs(blogs.concat(returnedBlog))
+        })
+      }
+    //Lyödään erroria jos yksikin tarvittava kenttä puuttuu
+    else {
+      setNotificationType('error')
+      notificationContent('Blog not added. Need more information')
+    }
   }
 
   //Hoidetaan sisäänkirjautuminen
@@ -88,6 +90,53 @@ const App = () => {
     setUser(null)
   }
 
+
+  //Like nappulan määritteleminen
+  const handleLikes = async (id) => {
+    const blog = blogs.find(blg => blg.id === id)
+    //console.log("blog on ", blog)
+    const updatedBlog = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user.id || blog.user }
+    //console.log("updatedBlog on ", updatedBlog)
+    try {
+      blogService
+      .update(id, updatedBlog)
+      .then(returnedBlog => {
+        setBlogs(blogs.map(blog => blog.id !== id ? blog: returnedBlog))
+        console.log("returnedBlog on ", returnedBlog)
+        setNotificationType('confirmation')
+        notificationContent(`Added a like to:  ${returnedBlog.title} by ${returnedBlog.author}`)
+      })
+    }
+    catch(error) {
+      setNotificationType('error')
+      notificationContent('Was not able to add like')
+    }   
+  }
+
+  //Delete nappulan määritteleminen
+  const handleDelete = (event) => {
+    event.preventDefault()
+    const id = event.target.value
+    const blog = blogs.find(n => n.id === id)
+    //console.log("blog on ", blog)
+    if (window.confirm(`Do you want to delete ${blog.title} by ${blog.author}`)) {  
+        //console.log("Härre Gyd blog on ", blog)
+        blogService.remove(blog.id)
+          .catch(error => {
+          setBlogs(blogs)
+          setNotificationType('error')
+          notificationContent('You were not able to delete the Blog, you may not have rights to the blog')
+        })
+        setBlogs(blogs.filter(blg => blg.id !== blog.id))
+        setNotificationType('confirmation')
+        notificationContent(`You have deleted: ${blog.title} by ${blog.author}`)
+      }
+    }
 
   //Määritetään sivulle kirjoitettavat sisäänkirjautumispalkit Togglablen sisällä, jotta ne näkyvät vasta kun painetaan loginista
   const loginForm = () => (
@@ -127,12 +176,14 @@ const App = () => {
   }
 
 
-  //Näytetään blogit TÄÄLLÄ FILTTERÖINTI PITÄISI SAADA KUNTOON TÄLLÄ HETKELLÄ DIIPADAAPAA
-  const showBlogs = () => blogs.map(filteredBlog =>
+  //Näytetään blogit tykkäysten mukaisessa järjestyksessä (sort)
+  const showBlogs = () => blogs.sort((a, b) => b.likes - a.likes).map(filteredBlog =>
     <Blog
       key={filteredBlog.id}
       blog={filteredBlog}
       user={user}
+      handleLikes={() => handleLikes(filteredBlog.id)}
+      handleDelete={handleDelete}
     />
   )
   
@@ -164,5 +215,7 @@ const App = () => {
     )
   }
 }
+
+
 
 export default App

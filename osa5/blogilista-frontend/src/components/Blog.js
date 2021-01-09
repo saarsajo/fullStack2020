@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 //Määritellään miten Blogi tulostetaan 
-const Blog = ({ user, blog }) => {
+const Blog = ({ user, blog, handleLikes, handleDelete}) => {
   const [AllInfo, setAllInfo] = useState(false)
   const showBasicInfo = { display: AllInfo ? 'none' : '' }
   const showAllInfo = { display: AllInfo ? '' : 'none' }
@@ -11,12 +11,7 @@ const Blog = ({ user, blog }) => {
   const nimi = blog.user.name
   console.log("Blogin id on ", id)
   console.log("Blogin lisääjän nimi on ", nimi)
-*/
-
-  //Like nappulan määritteleminen
-  const handleLikes = () => {
-    console.log("Nappula vaatii toteutuksen")
-  }
+  */
 
   //Näytetään ainoastaan blogin title ja author ellei blogia paineta auki, jolloin näytetään kaikki tiedot
   return (
@@ -32,6 +27,7 @@ const Blog = ({ user, blog }) => {
           <li><a href={blog.url}>{blog.url}</a></li>
           <li>{blog.likes} Likes <button type='button' value={id} onClick={handleLikes}>Like</button></li>
           <li>{blog.user.name} </li>
+          <li><button type='button' value={id} onClick={handleDelete}>Delete</button></li>
         </ul>
       </div>
     </div>

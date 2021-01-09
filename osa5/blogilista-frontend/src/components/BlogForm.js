@@ -3,8 +3,7 @@ import React, {useState} from 'react'
 //Uuden blogin lisäämislomake
 const BlogForm = ({createBlog}) => {
 
-
-  //Pitääkö muokata???
+  //Asetetaan titlen authorin ja urlin alkutila
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -12,7 +11,7 @@ const BlogForm = ({createBlog}) => {
   //asetetaan blogin title
   const handleTitleChange = ({ target }) => {
     setTitle(target.value)
-  }  
+  }
 
   //asetetaan blogin author
   const handleAuthorChange = ({ target }) => {
@@ -30,7 +29,7 @@ const BlogForm = ({createBlog}) => {
     createBlog({
       title: title,
       author: author,
-      url: url,
+      url: url
     })
 
     setTitle('')
