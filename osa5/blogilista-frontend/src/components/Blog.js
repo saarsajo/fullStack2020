@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 //Määritellään miten Blogi tulostetaan
-const Blog = ({ user, blog, handleLikes, handleDelete }) => {
+const Blog = ({ blog, handleLikes, handleDelete }) => {
   const [AllInfo, setAllInfo] = useState(false)
   const showBasicInfo = { display: AllInfo ? 'none' : '' }
   const showAllInfo = { display: AllInfo ? '' : 'none' }
