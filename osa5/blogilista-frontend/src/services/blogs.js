@@ -4,7 +4,7 @@ const baseUrl = '/api/blogs'
 let token = null
 
 //Asetetaan uusi tokenin arvo moduulin exporttaamalla funktiolla setToken
-const setToken = newToken => {  
+const setToken = newToken => {
   token = `bearer ${newToken}`
 }
 
@@ -18,7 +18,7 @@ const create = newObject => {
   const config = {
     headers: { Authorization: token },
   }
-  
+
   const request = axios.post(baseUrl, newObject, config)
   return request.then(response => response.data)
 }

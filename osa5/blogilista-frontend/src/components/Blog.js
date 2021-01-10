@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
-//Määritellään miten Blogi tulostetaan 
-const Blog = ({ user, blog, handleLikes, handleDelete}) => {
+//Määritellään miten Blogi tulostetaan
+const Blog = ({ user, blog, handleLikes, handleDelete }) => {
   const [AllInfo, setAllInfo] = useState(false)
   const showBasicInfo = { display: AllInfo ? 'none' : '' }
   const showAllInfo = { display: AllInfo ? '' : 'none' }
@@ -17,8 +17,8 @@ const Blog = ({ user, blog, handleLikes, handleDelete}) => {
   return (
     <div  className='blog' onClick={() => setAllInfo(!AllInfo)}>
       <div style={showBasicInfo}>
-      <ul>
-        <li>{blog.title} : {blog.author}</li>
+        <ul>
+          <li>{blog.title} : {blog.author}</li>
         </ul>
       </div>
       <div style={showAllInfo}>
